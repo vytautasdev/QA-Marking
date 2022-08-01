@@ -1,48 +1,59 @@
 package com.example.CRUDexercise.service;
 
+//import com.example.CRUDexercise.model.Account;
 import com.example.CRUDexercise.model.Account;
-import com.example.CRUDexercise.repository.AccountRepo;
+import com.example.CRUDexercise.model.AccountDTO;
+import com.example.CRUDexercise.repository.AccountRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountService {
 
-    private AccountRepo accountRepo;
+    private AccountRepository accountRepository;
 
-    public AccountService(AccountRepo accountRepo) {
-        this.accountRepo = accountRepo;
+
+    private ModelMapper mapper;
+
+    public AccountService(AccountRepository accountRepository, ModelMapper mapper) {
+        this.accountRepository = accountRepository;
+        this.mapper = mapper;
     }
 
-    public Account addAccount(Account acc) {
-        return this.accountRepo.save(acc);
+    private AccountDTO mapToDTO(Account account) {
+        return mapper.map(account, AccountDTO.class);
     }
 
-    public List<Account> getAllAccounts() {
-        return accountRepo.findAll();
+    public AccountDTO addAccount(Account account) {
+        var saved = accountRepository.save(account);
+        return mapToDTO((Account) saved);
     }
 
-    public Account updateAccount(Long id, Account acc) {
-        var temp = accountRepo.findById(id);
-        var existing = temp.get();
-
-        existing.setName(acc.getName());
-        existing.setAccNumber(acc.getAccNumber());
-
-        return accountRepo.save(existing);
-
+    public List<AccountDTO> getAllAccounts() {
+        return accountRepository.findAll().stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
-    public boolean deleteAccount(Long id) {
-        accountRepo.deleteById(id);
-        var exists = accountRepo.existsById(id);
+    public AccountDTO updateAccount(Long id, Account account) {
+        var existingOptional = accountRepository.findById(id);
+        var existing = existingOptional.get();
+
+        existing.setName(account.getName());
+        existing.setAccNumber(account.getAccNumber());
+
+        var updated = accountRepository.save(existing);
+        return mapToDTO(updated);
+    }
+
+    public boolean removeAccount(Long id) {
+        accountRepository.deleteById(id);
+        var exists = accountRepository.existsById(id);
         return !exists;
     }
 
-    public List<Account> getAccountByName(String name) {
-        return accountRepo.findAccountByName(name);
+    public List<AccountDTO> getAccountByName(String name) {
+        return accountRepository.findAccountByName(name);
     }
-
-
 }

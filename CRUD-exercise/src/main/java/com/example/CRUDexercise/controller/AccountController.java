@@ -1,6 +1,7 @@
 package com.example.CRUDexercise.controller;
 
 import com.example.CRUDexercise.model.Account;
+import com.example.CRUDexercise.model.AccountDTO;
 import com.example.CRUDexercise.service.AccountService;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,28 +17,27 @@ public class AccountController {
     }
 
     @PostMapping("/create")
-    public Account addPerson(@RequestBody Account acc) {
+    public AccountDTO addPerson(@RequestBody Account acc) {
         return accountService.addAccount(acc);
     }
 
     @GetMapping("/read")
-    public List<Account> readAll() {
+    public List<AccountDTO> readAll() {
         return accountService.getAllAccounts();
     }
 
     @GetMapping("/read/{name}")
-    public List<Account> readByName(@PathVariable String name) {
+    public List<AccountDTO> readByName(@PathVariable String name) {
         return accountService.getAccountByName(name);
     }
 
     @PutMapping("/update/{id}")
-    public Account update(@PathVariable Long id, @RequestBody Account acc) {
+    public AccountDTO update(@PathVariable Long id, @RequestBody Account acc) {
         return accountService.updateAccount(id, acc);
     }
 
     @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable Long id) {
-        accountService.deleteAccount(id);
+        accountService.removeAccount(id);
     }
-
 }

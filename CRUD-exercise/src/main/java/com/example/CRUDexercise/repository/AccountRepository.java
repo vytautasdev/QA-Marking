@@ -1,6 +1,7 @@
 package com.example.CRUDexercise.repository;
 
 import com.example.CRUDexercise.model.Account;
+import com.example.CRUDexercise.model.AccountDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -10,10 +11,12 @@ import java.util.List;
 
 @Repository
 @EnableJpaRepositories
-public interface AccountRepo extends JpaRepository<Account, Long> {
+public interface AccountRepository extends JpaRepository<Account, Long> {
 
-    @Query("SELECT acc FROM Account acc WHERE acc.name = ?1")
-    List<Account> findAccountByName(String name);
+    @Query("SELECT acc FROM AccountDTO acc WHERE acc.name = ?1")
+    List<AccountDTO> findAccountByName(String name);
+
+
 
 
 }

@@ -6,23 +6,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Account {
+public class AccountDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String accNumber;
-    private String password;
 
-    public Account(Long id, String name, String accNumber, String password) {
-        this.id = id;
-        this.name = name;
-        this.accNumber = accNumber;
-        this.password = password;
-    }
 
-    public Account() {
+    public AccountDTO() {
     }
 
     public Long getId() {
@@ -47,13 +40,5 @@ public class Account {
 
     public void setAccNumber(String accNumber) {
         this.accNumber = accNumber;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }
